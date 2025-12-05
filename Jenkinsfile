@@ -58,14 +58,14 @@ pipeline {
          }
      }
 
-     stage('Deploy') {
+    /* stage('Deploy') {
         steps {
              bat """
              echo starting deploy..."
              java -jar target/biblioteca-${VERSION_BACK}.jar
              """
         }
-     }
+     } */
 
    }
 
