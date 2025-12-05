@@ -6,7 +6,7 @@ pipeline {
       maven 'Maven3.9.11'
    }
 
-   enviroment{
+   environment{
        VERSION_BACK = "2.0.1"
    }
 
