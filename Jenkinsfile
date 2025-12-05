@@ -6,6 +6,10 @@ pipeline {
       maven 'Maven3.9.11'
    }
 
+   enviroment{
+       VERSION_BACK = "2.0.1"
+   }
+
    stages {
 
        stage('Show messages'){
@@ -24,13 +28,19 @@ pipeline {
          }
      }
 
-     stage('Maven clean'){
+     stage('Comandos Maven'){
          steps {
-         bat 'mvn clean'
+         bat 'mvn clean package'
          }
 
      }
 
+     stage('Crea Directorio'){
+         steps{
+             bat 'mkdir v%VERSION_BACK%'
+         }
+     }
 
    }
+
 }
