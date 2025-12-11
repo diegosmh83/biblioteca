@@ -23,9 +23,8 @@ public class Libro {
     @Column
     private String autor;
 
-    public Libro(Long id, String autor, String titulo) {
-        this.id = id;
-        this.autor = autor;
-        this.titulo = titulo;
+
+    public Libro(long l, String s, String s1) {
+
     }
 }
