@@ -19,8 +19,11 @@ import java.util.Optional;
 
 import static java.lang.reflect.Array.get;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+
 
 @WebMvcTest(LibroController.class)
 @ActiveProfiles("test")
@@ -34,27 +37,25 @@ class LibroControllerTest {
 
 
     @Test
-    void obtenerPorId() throws Exception{
+    void obtenerPorId() throws Exception {
         // Creamos el libro que vamos a devolver
         Libro libro = new Libro(1L, "TITULO 1", "AUTOR 1");
 
-        // Mockeamos el servicio para que devuelva nuestro libro
+        // Mockeamos el servicio
         Mockito.when(libroServiceImpl.getLibro(1L))
                 .thenReturn(Optional.of(libro));
 
-        // Creamos el RequestBuilder para la petición GET
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/1");
-
         // Ejecutamos la petición con MockMvc
-        mockMvc.perform(request)
+        mockMvc.perform(get("/api/1"))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.id").value(1L))
-                .andExpect((ResultMatcher) jsonPath("$.titulo").value("TITULO 1"))
-                .andExpect((ResultMatcher) jsonPath("$.autor").value("AUTOR 1"));
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.titulo").value("TITULO 1"))
+                .andExpect(jsonPath("$.autor").value("AUTOR 1"));
 
         // Verificamos que el servicio se llamó correctamente
         Mockito.verify(libroServiceImpl).getLibro(1L);
     }
+
 
 
 }
