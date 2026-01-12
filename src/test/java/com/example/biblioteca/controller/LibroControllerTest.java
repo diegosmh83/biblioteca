@@ -2,6 +2,7 @@ package com.example.biblioteca.controller;
 
 import com.example.biblioteca.entity.Libro;
 import com.example.biblioteca.service.LibroService;
+import com.example.biblioteca.service.LibroServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -29,7 +30,7 @@ class LibroControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private LibroService servicio;
+    private LibroServiceImpl libroServiceImpl;
 
 
     @Test
@@ -38,7 +39,7 @@ class LibroControllerTest {
         Libro libro = new Libro(1L, "TITULO 1", "AUTOR 1");
 
         // Mockeamos el servicio para que devuelva nuestro libro
-        Mockito.when(servicio.getLibro(1L))
+        Mockito.when(libroServiceImpl.getLibro(1L))
                 .thenReturn(Optional.of(libro));
 
         // Creamos el RequestBuilder para la petición GET
@@ -52,7 +53,7 @@ class LibroControllerTest {
                 .andExpect((ResultMatcher) jsonPath("$.autor").value("AUTOR 1"));
 
         // Verificamos que el servicio se llamó correctamente
-        Mockito.verify(servicio).getLibro(1L);
+        Mockito.verify(libroServiceImpl).getLibro(1L);
     }
 
 
