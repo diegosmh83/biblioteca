@@ -1,72 +1,58 @@
 pipeline {
-   agent any
+    agent any
 
-   tools {
-      jdk 'jdk-21'
-      maven 'Maven3.9.11'
-   }
-
-   environment{
-       VERSION_BACK = "2.0.1"
-   }
-
-   stages {
-
-       stage('Show messages'){
-
-       steps {
-           echo "Primer stage del pipeline"
-           echo "A continuacion hacemos checkout del proyecto"
+    tools {
+          jdk 'jdk-21'
+          maven 'Maven3.9.11'
        }
 
-     }
+    environment {
+        VERSION_BACK = "2.0.1"
+    }
 
-     stage('Checkout proyecto'){
-         steps {
-             git branch: 'master',
-                  url: 'https://github.com/diegosmh83/biblioteca.git'
-         }
-     }
+    stages {
 
-     stage('Comandos Maven'){
-         steps {
-         bat 'mvn clean package'
-         }
-
-     }
-
-     stage('Crea Directorio'){
-         steps{
-             bat 'mkdir v%VERSION_BACK%'
-         }
-     }
-
-     stage('Copiar ficheros'){
-         steps{
-             bat 'xcopy /Y ".\\target\\*.jar" ".\\"v%VERSION_BACK%""'
-         }
-         post {
-             success {
-                bat 'echo "Despues de copiar los ficheros correctamente"'
-             }
-             failure {
-                bat 'echo "ERROR copiando los ficheros"'
-             }
-             always {
-                bat 'echo "Esto se ejecuta siempre tras el stage copiar ficheros"'
-             }
-         }
-     }
-
-    /* stage('Deploy') {
-        steps {
-             bat """
-             echo starting deploy..."
-             java -jar target/biblioteca-${VERSION_BACK}.jar
-             """
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
         }
-     } */
 
-   }
+        stage('Build') {
+            steps {
+                bat 'mvn clean compile'
+            }
+        }
 
+        stage('Test') {
+            steps {
+                bat 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                bat 'mvn package'
+            }
+        }
+
+        stage('Move jar') {
+            steps {
+                bat '''
+                    if exist versiones (
+                        rmdir /s /q versiones
+                    )
+                '''
+            }
+            post {
+                success {
+                    bat '''
+                        mkdir versiones
+                        copy target\\*-%VERSION%.jar versiones\\
+                    '''
+                }
+            }
+        }
+    }
 }
+
