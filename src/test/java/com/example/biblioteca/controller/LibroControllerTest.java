@@ -33,7 +33,7 @@ class LibroControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private LibroServiceImpl libroServiceImpl;
+    private LibroService libroService;
 
 
     @Test
@@ -42,7 +42,7 @@ class LibroControllerTest {
         Libro libro = new Libro(1L, "TITULO 1", "AUTOR 1");
 
         // Mockeamos el servicio
-        Mockito.when(libroServiceImpl.getLibro(1L))
+        Mockito.when(libroService.getLibro(1L))
                 .thenReturn(Optional.of(libro));
 
         // Ejecutamos la petición con MockMvc
@@ -53,7 +53,7 @@ class LibroControllerTest {
                 .andExpect(jsonPath("$.autor").value("AUTOR 1"));
 
         // Verificamos que el servicio se llamó correctamente
-        Mockito.verify(libroServiceImpl).getLibro(1L);
+        Mockito.verify(libroService).getLibro(1L);
     }
 
 
