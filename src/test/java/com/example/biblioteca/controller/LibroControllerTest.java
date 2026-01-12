@@ -43,7 +43,7 @@ class LibroControllerTest {
                 .thenReturn(Optional.of(libro));
 
         // Creamos el RequestBuilder para la petición GET
-        RequestBuilder request = MockMvcRequestBuilders.get("/libros/1");
+        RequestBuilder request = MockMvcRequestBuilders.get("/api/1");
 
         // Ejecutamos la petición con MockMvc
         mockMvc.perform(request)
